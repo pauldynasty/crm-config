@@ -11,7 +11,7 @@ spring:
       ddl-auto: none
     open-in-view: false
 multitenancy:
-  default-tenant: plantict
+  default-tenant: criobit
   http:
     header-name: X-TENANT-ID
   datasource-cache:

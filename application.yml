@@ -1,0 +1,47 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: multitenant-crm
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+multitenancy:
+  default-tenant: plantict
+  http:
+    header-name: X-TENANT-ID
+  datasource-cache:
+    maximumSize: 100
+    expireAfterAccess: 10
+  master:
+    repository:
+      packages: it.plant.multitenantcrm.multitenancy.repository
+    entityManager:
+      packages: it.plant.multitenantcrm.multitenancy.domain
+    datasource:
+      url: jdbc:postgresql://localhost:5432/master
+      username: plant
+      password: plant
+    liquibase:
+      enabled: true
+      changeLog: classpath:db/changelog/db.changelog-master.yaml
+  tenant:
+    repository:
+      packages: it.plant.multitenantcrm.repository
+    entityManager:
+      packages: it.plant.multitenantcrm.entity
+    datasource:
+      url-prefix: jdbc:postgresql://localhost:5432/
+      hikari:
+        maximumPoolSize: 2
+        minimumIdle: 0
+        idleTimeout: 30000
+    liquibase:
+      changeLog: classpath:db/changelog/db.changelog-tenant.yaml
+encryption:
+  secret: verySecret
+  salt: jozo
